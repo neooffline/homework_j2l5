@@ -14,7 +14,7 @@ public class ArrayMath extends Thread {
             arr[i] = (float) (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5)
                     + Math.cos(0.5f + i / 2));
         }
-        System.out.printf("Время, затраченно без деления "System.currentTimeMillis() - a);
+        System.out.printf("Время, затраченное без использования разделения массива %d мсек.\n",(System.currentTimeMillis() - a));
     }
 
     public void twoTheadmath() {
@@ -44,7 +44,7 @@ public class ArrayMath extends Thread {
         System.arraycopy(arr1, 0, arr, 0, h);
         System.arraycopy(arr2, 0, arr, h, h);
         aRes += System.currentTimeMillis() - a;
-        System.out.println(aRes);
+        System.out.printf("Время, затраченное c использованием разделения массива %d мсек.\n",aRes);
     }
 
 
