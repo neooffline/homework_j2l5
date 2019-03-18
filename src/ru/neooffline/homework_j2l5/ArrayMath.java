@@ -5,7 +5,7 @@ public class ArrayMath {
     static final int HALF_SIZE = SIZE / 2;
     float[] arr = new float[SIZE];
 
-    private long currentTime, resultTime;
+    private long operationStartTime;
 
     public void mathArray(float[] array) {
         for (int i = 0; i < array.length; i++) {
@@ -20,8 +20,8 @@ public class ArrayMath {
         }
         long currentTime = System.currentTimeMillis();
         mathArray(arr);
-        System.out.printf("Время, затраченное без использования разделения массива %d мсек.\n",
-                (System.currentTimeMillis() - currentTime));
+        System.out.printf("Время, затраченное без использования разделения массива %d сек.\n",
+                (System.currentTimeMillis() - currentTime) / 1000);
     }
 
     public void twoThreadMath() throws InterruptedException {
@@ -31,36 +31,35 @@ public class ArrayMath {
         for (int i = 0; i < SIZE; i++) {
             initArr[i] = 1.0f;
         }
-        currentTime = System.currentTimeMillis();
+        operationStartTime = System.currentTimeMillis();
         System.arraycopy(initArr, 0, arr1, 0, HALF_SIZE);
         System.arraycopy(initArr, HALF_SIZE, arr2, 0, HALF_SIZE);
-        resultTime = System.currentTimeMillis() - currentTime;
+        long resultTime = System.currentTimeMillis() - operationStartTime;
         Thread fistThread = new Thread(() -> {
+            System.out.println(Thread.currentThread() + " started");
             mathArray(arr1);
-        }
-        );
+        });
         Thread secondThread = new Thread(() -> {
+            System.out.println(Thread.currentThread() + " started");
             mathArray(arr2);
         });
-        currentTime = System.currentTimeMillis();
+        operationStartTime = System.currentTimeMillis();
         fistThread.start();
-        fistThread.join();
-        resultTime += System.currentTimeMillis() - currentTime;
-        currentTime = System.currentTimeMillis();
         secondThread.start();
+        fistThread.join();
         secondThread.join();
-        resultTime += System.currentTimeMillis() - currentTime;
-        currentTime = System.currentTimeMillis();
+        resultTime += System.currentTimeMillis() - operationStartTime;
+        operationStartTime = System.currentTimeMillis();
         System.arraycopy(arr1, 0, arr, 0, HALF_SIZE);
         System.arraycopy(arr2, 0, arr, HALF_SIZE, HALF_SIZE);
-        resultTime += System.currentTimeMillis() - currentTime;
+        resultTime += System.currentTimeMillis() - operationStartTime;
         //Проверка заполнения массива
-        for (int i = 0; i < arr.length; i += 1454554) {
+        /*for (int i = 0; i < arr.length; i += 1454554) {
             System.out.printf("Элемент номер %d = %.3f\n",
                     i, arr[i]);
-        }
-        System.out.printf("Время, затраченное c использованием разделения массива %d мсек.\n",
-                resultTime);
+        }*/
+        System.out.printf("Время, затраченное c использованием разделения массива %d сек.\n",
+                resultTime / 1000);
     }
 
 
